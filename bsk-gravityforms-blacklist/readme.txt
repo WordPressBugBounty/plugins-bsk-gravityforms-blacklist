@@ -3,8 +3,8 @@ Contributors: bannersky
 Plugin URI: https://www.bannersky.com/gravity-forms-blacklist-and-custom-validation/
 Tags: gravity form,blacklist,ip blacklist,invitation code,formidable forms
 Requires at least: 4.0
-Tested up to: 6.6
-Stable tag: 3.8.1
+Tested up to: 6.6.2
+Stable tag: 3.9
 
 Checks field content and block submitting base on your keywords. Blocking IP, Country is only supported in the Pro version. 
 
@@ -40,6 +40,30 @@ This plugin helps you avoid spam submissions from Gravity Forms, Formidable Form
 8. Blocked when submit form
 
 == Changelog ==
+
+3.9
+
+* ( Pro Version )Added: support Block IP ranges such as 97.157.155.*, 97.157.*, 97.*
+
+* ( Pro Version )Added: new tag [ITEM_VALUE] to show blocked item( keyword ) in validation message.
+
+* ( Pro Version )Fixed: the issue of cannot block word with symbols.
+
+* ( Pro Version )Fixed: remove the html error message when add IP list
+
+* Fixed: a Cross Site Scripting (XSS) vulnerability in backend.
+
+* Compatible with Gravity Forms 2.8.17
+
+* Compatible with Formidable Forms 6.14
+
+* Compatible with WPForms 1.9.0.4
+
+* Compatible with Forminator 1.35.0
+
+* Compatible with Contact Form 7 5.9.8
+
+* Compatible with WordPress 6.6.2
 
 3.8.1
 

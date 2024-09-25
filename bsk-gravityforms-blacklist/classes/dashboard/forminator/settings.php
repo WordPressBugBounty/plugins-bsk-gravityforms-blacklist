@@ -4,6 +4,8 @@ class BSK_GFBLCV_Dashboard_Forminator_Settings {
     public $_bsk_gfblcv_OBJ_frmt_form_settings = false;
     public $_bsk_gfblcv_OBJ_frmt_field_settings = false;
 
+    var $settings_targets = array( 'form-settings', 'field-settings' );
+
 	public function __construct() {
 
         require_once( BSK_GFBLCV_FREE_DIR.'classes/dashboard/forminator/form-settings.php' );
@@ -40,6 +42,9 @@ class BSK_GFBLCV_Dashboard_Forminator_Settings {
         </div>
         <?php
         $target_tab = isset($_REQUEST['target']) ? sanitize_text_field($_REQUEST['target']) : '';
+        if ( ! in_array( $target_tab, $this->settings_targets ) ) {
+            $target_tab = $this->settings_targets[0];
+        }
 		echo '<input type="hidden" id="bsk_gfblcv_forminator_settings_target_tab_ID" value="'.$target_tab.'" />';
     }
 

@@ -4,7 +4,7 @@
 * Plugin Name: BSK Forms Blacklist
 * Plugin URI: https://www.bannersky.com/gravity-forms-blacklist-and-custom-validation/
 * Description: The plugin help you avoid spam submissions from GravityForms, Formidable Forms, WP Forms. You may set it to use blacklist, whitelist, ip address or email to validate visitor's input and only allow valid entry submitted. It support validate multiple fields.
-* Version: 3.8.1
+* Version: 3.9
 * Author: BannerSky.com
 * Author URI: http://www.bannersky.com/
 * License: GPLv2 or later
@@ -28,7 +28,7 @@ class BSK_GFBLCV {
 	
     private static $instance;
     
-	public static $_plugin_version = '3.8';
+	public static $_plugin_version = '3.9';
 	private static $_bsk_gfblcv_db_version = '3.2';
 	private static $_bsk_gfblcv_saved_db_version_option = '_bsk_gfbl_db_ver_';
     private static $_plugin_db_upgrading = '_bsk_gfbl_db_upgrading_';
