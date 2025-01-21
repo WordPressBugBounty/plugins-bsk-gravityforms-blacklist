@@ -2,9 +2,14 @@
 class BSK_GFBLCV_Dashboard_Settings {
 
     var $settings_targets = array( 'general-settings', 'blocked-data', 'sending-invitaiton-code' );
+    public static $_bsk_gfbl_OBJ_settings_capabilities = NULL;
 	
 	public function __construct() {
 		
+        require_once( 'dashboard-settings-capabilities.php' );
+
+        self::$_bsk_gfbl_OBJ_settings_capabilities = new BSK_GFBLCV_Dashboard_Settings_Capabilities();
+
         add_action( 'bsk_gfblcv_save_general_settings', array( $this, 'bsk_gfblcv_save_general_settings_fun' ) );
         add_action( 'bsk_gfblcv_save_blocked_data_settings', array( $this, 'bsk_gfblcv_save_blocked_data_settings_fun' ) );
         add_action( 'bsk_gfblcv_save_sending_invitation_code_settings', array( $this, 'bsk_gfblcv_save_sending_invitation_code_settings_fun' ) );
@@ -20,11 +25,13 @@ class BSK_GFBLCV_Dashboard_Settings {
                 <a class="nav-tab nav-tab-active" href="javascript:void(0);" id="bsk_gfblcv_setings_tab-general-settings"><?php esc_html_e( 'General', 'bskgfbl' ); ?></a>
                 <a class="nav-tab" href="javascript:void(0);" id="bsk_gfblcv_setings_tab-blocked-data"><?php esc_html_e( 'Block Form Data & Notify', 'bskgfbl' ); ?></a>
                 <a class="nav-tab" href="javascript:void(0);" id="bsk_gfblcv_setings_tab-sending-invitaiton-code"><?php esc_html_e( 'Inviation Code Email Settings', 'bskgfbl' ); ?></a>
+                <a class="nav-tab" href="javascript:void(0);" id="bsk_gfblcv_setings_tab-capabilities"><?php esc_html_e( 'Backend Access', 'bskgfbl' ); ?></a>
             </h2>
             <div id="bsk_gfblcv_setings_tab_content_wrap_ID">
 				<section><?php $this->show_general_settings( $settings_data, 'general-settings' ); ?></section>
                 <section><?php $this->show_blocked_data_settings( $settings_data, 'blocked-data' ); ?></section>
                 <section><?php $this->show_sending_invitation_code_settings( $settings_data, 'sending-invitaiton-code' ); ?></section>
+                <section><?php self::$_bsk_gfbl_OBJ_settings_capabilities->show_settings( $settings_data ); ?></section>
             </div>
         </div>
         <?php

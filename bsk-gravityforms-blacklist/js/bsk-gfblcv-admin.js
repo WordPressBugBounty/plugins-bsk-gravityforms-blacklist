@@ -202,8 +202,8 @@ jQuery(document).ready( function($) {
 		
 		$("#bsk_gfblcv_item_id_ID").val( item_id );
 		$("#bsk_gfblcv_action_ID").val( "delete_item" );
-		
-		$("#bsk_gfblcv_items_form_id").submit();
+        $("#bsk_gfblcv_items_form_id").submit();
+
 	});
 	
 	$("#bsk_gfblcv_add_item_by_csv_ID").change(function (){

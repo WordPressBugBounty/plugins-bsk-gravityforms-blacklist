@@ -89,14 +89,27 @@ class BSK_GFBLCV_Dashboard_Items extends WP_List_Table {
 
     function do_bulk_action() {
         global $wpdb;
+
+        // Detect when a bulk action is being triggered.
+		$action = $this->current_action();
+		if ( ! $action ) {
+			return;
+		}
+
+        check_admin_referer( 'bulk-' . $this->_args['plural'] );
         
         $items_table = $wpdb->prefix.BSK_GFBLCV::$_bsk_gfblcv_items_tbl_name;
-        
-		if( isset($_POST['bsk-gfblcv-item']) && count($_POST['bsk-gfblcv-item']) > 0 ){
-			
-			if( $_POST['action'] == 'delete' || $_POST['action2'] == 'delete' ){
-				$sql = 'DELETE FROM `'.$items_table.'` WHERE `id` IN('.implode(',', $_POST['bsk-gfblcv-item']).')';
+		if ( isset( $_POST['bsk-gfblcv-item'] ) && count( $_POST['bsk-gfblcv-item'] ) > 0 ) {
+
+            $ids_array = array();
+            foreach ( $_POST['bsk-gfblcv-item'] as $id ) {
+                $ids_array[] = intval( sanitize_text_field( $id ) );
+            }
+			if ( $action == 'delete' ) {
+                
+				$sql = 'DELETE FROM `' . $items_table . '` WHERE `id` IN(' . implode( ',', $ids_array ) . ')';
 				$wpdb->query( $sql );
+                
 			}
 		}
     }
