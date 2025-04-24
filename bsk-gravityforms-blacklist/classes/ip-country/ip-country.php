@@ -378,8 +378,16 @@ class BSK_GFBLCV_IP_Country {
         $ip_country_respond_body  = wp_remote_retrieve_body( $ip_country_return );
         $ip_country_return_array = json_decode( $ip_country_respond_body, true );
 
-        if( $ip_country_return_array['statusCode'] != 'OK' ){
-            $data_to_return = '<p style="color: #FF0000;">ERROR: '.$ip_country_return_array['statusMessage'].'</p>';
+        if ( $ip_country_return_array['statusCode'] != 'OK' ) {
+
+            $error_message = $ip_country_return_array['statusMessage'];
+            if ( isset( $ip_country_return_array['message'] ) ) {
+                if ( trim( $error_message ) ) {
+                    $error_message .= ', ';
+                }
+                $error_message .= $ip_country_return_array['message'];
+            }
+            $data_to_return = '<p style="color: #FF0000;">ERROR: ' . $error_message . '</p>';
             
             return( array( 'result' => false, 'html' => $data_to_return ) );
         }

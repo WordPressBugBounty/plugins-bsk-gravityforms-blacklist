@@ -129,6 +129,10 @@ class BSK_GFBLCV_Dashboard_Forminator_Settings_Form_Settings {
                     <?php
                     $enable_checked = $enable ? ' checked' : '';
                     $disable_checked = $enable ? '' : ' checked';
+
+                    $bw_list = 'https://bannersky.com/document/gravity-forms-blacklist-documentation/apply-list-to-form-field/apply-blacklist-white-list-to-forminator-form-field/';
+                    $ei_list = 'https://bannersky.com/document/gravity-forms-blacklist-documentation/apply-list-to-form-field/apply-email-list-ip-list-to-forminator-form-field/';
+                    $invit_list = 'https://bannersky.com/document/gravity-forms-blacklist-documentation/apply-list-to-form-field/apply-invitation-codes-list-to-forminator-form-field/';
                     ?>
                     <tr>
                         <th>&nbsp;</th>
@@ -144,6 +148,7 @@ class BSK_GFBLCV_Dashboard_Forminator_Settings_Form_Settings {
                 </table>
             </div>
             <div class="bsk-gfblcv-form-settings-actions-container" style="display: <?php echo $form_settings_actions_container_display; ?>">
+                <p style="padding-top: 20px; padding-bottom: 20px;">Don't forget to <a href="<?php echo $bw_list; ?>" target="_blank">apply Blacklist / White list</a> / <a href="<?php echo $ei_list; ?>" target="_blank">Email list / IP list</a> / <a href="<?php echo $invit_list; ?>" target="_blank">Invitation codes list</a> to a form field</a></p>
                 <h4><?php esc_html_e( 'Actions', 'bsk_gfblcv' ); ?></h4>
                 <table class="gforms_form_settings" cellspacing="0" cellpadding="0">
                     <?php

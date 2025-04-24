@@ -120,11 +120,14 @@ class BSK_GFBLCV_Dashboard_WPForms_Settings {
                                                 'class' => 'bsk-gfblcv-wpforms-general-settings'
                                              )
                                    );
+                $bw_list = 'https://bannersky.com/document/gravity-forms-blacklist-documentation/apply-list-to-form-field/apply-blacklist-white-list-to-wpforms-field/';
+                $ei_list = 'https://bannersky.com/document/gravity-forms-blacklist-documentation/apply-list-to-form-field/apply-email-list-ip-list-to-wpforms-form-field/';
+                $invit_list = 'https://bannersky.com/document/gravity-forms-blacklist-documentation/apply-list-to-form-field/apply-invitation-codes-list-to-wpforms-form-field/';
                 ?>
                 <div style="clear: both;"></div>
             </div>
-            <p>&nbsp;</p>
             <div class="bsk-gfblcv-wpform-settings-actions-container" style="display: <?php echo $settings_panel_display ?>;">
+                <p style="padding: 20px 0 20px 0;">Don't forget to <a href="<?php echo $bw_list; ?>" target="_blank">apply Blacklist / White list</a> / <a href="<?php echo $ei_list; ?>" target="_blank">Email list / IP list</a> / <a href="<?php echo $invit_list; ?>" target="_blank">Invitation codes list</a> to a form field</a></p>
                 <h3><?php esc_html_e( 'Actions', 'bsk_gfblcv' ); ?></h3>
                 <?php
                 
