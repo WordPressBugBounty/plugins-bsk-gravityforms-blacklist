@@ -3,14 +3,17 @@ class BSK_GFBLCV_Dashboard_WPForms {
 	
 	public $_bsk_gfblcv_OBJ_wpforms_field = NULL;
 	public $_bsk_gfblcv_OBJ_wpforms_settings = NULL;
+    public $_bsk_gfblcv_OBJ_wpforms_entry = NULL;
     
 	public function __construct() {
 		
 		require_once( BSK_GFBLCV_FREE_DIR.'classes/dashboard/wpforms/form-field.php' );
 		require_once( BSK_GFBLCV_FREE_DIR.'classes/dashboard/wpforms/form-settings.php' );
+        require_once( BSK_GFBLCV_FREE_DIR.'classes/dashboard/wpforms/form-entry.php' );
         
 		$this->_bsk_gfblcv_OBJ_wpforms_field = new BSK_GFBLCV_Dashboard_WPForms_Field();
 		$this->_bsk_gfblcv_OBJ_wpforms_settings = new BSK_GFBLCV_Dashboard_WPForms_Settings();
+        $this->_bsk_gfblcv_OBJ_wpforms_entry = new BSK_GFBLCV_Dashboard_WPForms_Entry();
         
         add_action( 'wp_ajax_bsk_gfblcv_wpforms_get_list_by_type', array( $this, 'bsk_gfblcv_wpforms_get_list_by_type_fun' ) );
 

@@ -412,7 +412,7 @@ jQuery(document).ready( function($) {
     $("#bsk_gfblcv_iplist_by_country_API_server_to_use_ID").change( function(){
         var api_server = $(this).val();
         api_server_key_require = $(this).children(":selected").attr("id");
-        console.log( api_server_key_require );
+
         $("#bsk_gfblcv_iplist_by_country_settings_container_ID").find( ".bsk-gfblcv-iplist-by-country-api-server-ref" ).css( "display", "none" );
         $("#bsk_gfblcv_iplist_by_country_settings_container_ID").find( "#bsk_gfblcv_iplist_by_country_API_key_ID" ).removeAttr( "disabled" );
         $("#bsk_gfblcv_iplist_by_country_settings_container_ID").find( "#bsk_gfblcv_iplist_by_country_API_key_ID" ).val( "" );
@@ -749,5 +749,308 @@ jQuery(document).ready( function($) {
             $( this ).parent().find( '.bsk-gfblcv-error-message' ).css( "display", "none" );
         }
     });
+
+    $(document).on('click', '.bsk-gfblcv-form-entry-email', function() {
+
+        var error_obj = $(this).parents('.bsk-gfblcv-form-entry-action-section').find('.bsk-gfblcv-form-entry-add-to-list-error');
+        var success_obj = $(this).parents('.bsk-gfblcv-form-entry-action-section').find('.bsk-gfblcv-form-entry-add-to-list-success');
+
+        error_obj.hide();
+        success_obj.hide();
+
+        var anyChecked = $( '.bsk-gfblcv-form-entry-email:checked' ).length > 0;
+        
+        /* if ( anyChecked ) {
+            $('.bsk-gfblcv-form-entry-list-container').show();
+        } else {
+            $('.bsk-gfblcv-form-entry-list-container').hide();
+        } */
+    });
+
+    $(document).on('change', '.bsk-gfblcv-form-entry-add-to-list-select', function() {
+        var error_obj = $(this).parents('.bsk-gfblcv-form-entry-action-section').find('.bsk-gfblcv-form-entry-add-to-list-error');
+        var success_obj = $(this).parents('.bsk-gfblcv-form-entry-action-section').find('.bsk-gfblcv-form-entry-add-to-list-success');
+
+        error_obj.hide();
+        success_obj.hide();
+    });
+
+    $(document).on('click', '.bsk-gfblcv-form-entry-add-item-to-list-select-save', function(e) {
+
+        e.preventDefault();
+
+        var error_obj = $(this).parents('.bsk-gfblcv-form-entry-action-section').find('.bsk-gfblcv-form-entry-add-to-list-error');
+        error_obj.hide();
+
+        var selectedEmails = [];
+        $('.bsk-gfblcv-form-entry-email:checked').each(function() {
+            selectedEmails.push($(this).val());
+        });
+
+        var selectedList = $(this).parents('.bsk-gfblcv-form-entry-action-section').find('.bsk-gfblcv-form-entry-add-to-list-select').val();
+
+        if (selectedEmails.length === 0) {
+            error_obj.html('Please select at least one email.');
+            error_obj.show();
+            return false;
+        }
+
+        if (!selectedList) {
+            error_obj.html('Please select a list.');
+            error_obj.show();
+            return false;
+        }
+
+        
+        bsk_gfblcv_form_entry_add_to_list_ajax_function( $(this), selectedEmails, selectedList, 'EMAIL' );
+        
+    });
+
+    $(document).on('click', '.bsk-gfblcv-form-entry-add-ip-to-list-select-save', function(e) {
+        e.preventDefault();
+
+        var error_obj = $(this).parents('.bsk-gfblcv-form-entry-action-section').find('.bsk-gfblcv-form-entry-add-to-list-error');
+
+        var selectedEmails = [];
+        var ip_value = $(this).data( 'ip' );
+
+        if (!ip_value) {
+            error_obj.html('No IP address found.');
+            error_obj.show();
+            return false;
+        }
+        selectedEmails.push(ip_value);
+
+        var selectedList = $(this).parents('.bsk-gfblcv-form-entry-action-section').find('.bsk-gfblcv-form-entry-add-to-list-select').val();
+        if (!selectedList) {
+            error_obj.html('Please select a list.');
+            error_obj.show();
+            return false;
+        }
+
+        
+        bsk_gfblcv_form_entry_add_to_list_ajax_function( $(this), selectedEmails, selectedList, 'IP' );
+    });
+
+    function bsk_gfblcv_form_entry_add_to_list_ajax_function( clicked_obj, selectedEmails, selectedList, listType ) {
+
+        var nonce_val = clicked_obj.parents( '.bsk-gfblcv-form-entry-actions-container' ).find('.bsk-gfblcv-form-entry-add-to-list-save-ajax-nonce').val();
+        var action_container = clicked_obj.parents('.bsk-gfblcv-form-entry-action-section');
+        var error_obj = clicked_obj.parents('.bsk-gfblcv-form-entry-action-section').find('.bsk-gfblcv-form-entry-add-to-list-error');
+        var success_obj = clicked_obj.parents('.bsk-gfblcv-form-entry-action-section').find('.bsk-gfblcv-form-entry-add-to-list-success');
+        var ajax_loder_obj = clicked_obj.parent().find( ".bsk-gfbl-ajax-loader" );
+
+        error_obj.hide();
+        success_obj.hide();
+
+        var data = {
+            action: 'bsk_gfblcv_save_items_to_list', // WordPress AJAX action（如果是 WordPress）
+            items: selectedEmails,
+            list_id: selectedList,
+            list_type: listType,
+            nonce: nonce_val,
+        };
+    }
+
+    $('.sui-accordion-item').on( "click", function() {
+        const clickedItem = $(this);
+        const timeoutDuration = 2000; // 2 seconds
+        const checkInterval = 100; // Check every 100ms
+        let timeElapsed = 0;
+        
+        if( !window.bsk_gfblcv_free_data || window.bsk_gfblcv_free_data == undefined ) {
+            return;
+        }
+        
+        // Start monitoring for the open class
+        const monitoringInterval = setInterval(function() {
+            timeElapsed += checkInterval;
+            
+            // Check if the item now has the open class
+            if (clickedItem.hasClass('sui-accordion-item--open')) {
+                clearInterval(monitoringInterval);
+                processOpenItem(clickedItem);
+            }
+            // Stop monitoring after timeout
+            else if (timeElapsed >= timeoutDuration) {
+                clearInterval(monitoringInterval);
+                // Optional: do something if timeout occurs
+            }
+        }, checkInterval);
+    });
+    
+    function processOpenItem(clickedItem) {
+        const contentRow = clickedItem.next('.sui-accordion-item-content.sui-accordion-item--open');
+        if (!contentRow.length) return;
+    
+        const boxFooter = contentRow.find('.sui-box-footer');
+        if (!boxFooter.length) return;
+    
+        // Remove existing actions container if present
+        const existingContainer = boxFooter.prev('.bsk-gfblcv-form-entry-actions-container');
+        if (existingContainer.length) {
+            existingContainer.remove();
+        }
+    
+        // Find all email addresses in the content
+        const emailItems = [];
+        contentRow.find('.sui-box-settings-slim-row').each(function() {
+            const col2 = $(this).find('.sui-box-settings-col-2');
+            if (col2.length) {
+                const text = col2.text().trim();
+                // Improved email regex that handles mailto links
+                const emailMatch = text.match(/\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/);
+                if (emailMatch && isValidEmail(emailMatch[0])) {
+                    // Avoid duplicates
+                    if (!emailItems.includes(emailMatch[0])) {
+                        emailItems.push(emailMatch[0]);
+                    }
+                }
+            }
+        });
+
+        // Create the select dropdown with dynamic options
+        let selectOptionsHtml = '<option value="">Select a list...</option>';
+        
+        if (window.bsk_gfblcv_free_data && window.bsk_gfblcv_free_data.list_data) {
+            const listData = window.bsk_gfblcv_free_data.list_data;
+            
+            for (const [groupLabel, items] of Object.entries(listData)) {
+                selectOptionsHtml += `<optgroup label="${escapeHtml(groupLabel)}">`;
+                
+                items.forEach(item => {
+                    selectOptionsHtml += `
+                        <option value="${item.id}">
+                            ${escapeHtml(item.title)}
+                        </option>
+                    `;
+                });
+                
+                selectOptionsHtml += '</optgroup>';
+            }
+        }
+
+        let addToListSaveAnchor = `<a href="javascript:void(0);" class="button bsk-gfblcv-form-entry-add-item-to-list-select-save">Save</a>`;
+
+        if ( !window.bsk_gfblcv_free_data || window.bsk_gfblcv_free_data?.license_type == 'PERSONAL' || window.bsk_gfblcv_free_data?.license_type == 'CREATOR') {
+            addToListSaveAnchor = '';
+        }
+        // Create the new container structure
+        const actionsContainer = $(`
+            <div class="bsk-gfblcv-form-entry-actions-container" style="padding:30px;">
+                <h3>BSK Forms Blacklist Actions</h3>
+                <div class="bsk-gfblcv-form-entry-action-section email-action-section">
+                    <h4>Add Email to List</h4>
+                    <ul class="bsk-gfblcv-email-list"></ul>
+                    <div class="bsk-gfblcv-form-entry-list-container">
+                        <p>
+                            <select class="bsk-gfblcv-form-entry-add-to-list-select" style="width: 50%;">
+                                ${selectOptionsHtml}
+                            </select>
+                        </p>
+                        <p>
+                            ${addToListSaveAnchor}
+                        </p>
+                        <p class="bsk-gfblcv-form-entry-add-to-list-error" style="color: #FF0000; display: none;"></p>
+                        <p class="bsk-gfblcv-form-entry-add-to-list-success" style="color: #008800; display: none;"></p>
+                    </div>
+                </div>
+                <input type="hidden" class="bsk-gfblcv-form-entry-add-to-list-save-ajax-nonce" value="${window.bsk_gfblcv_free_data?.ajax_nonce}">
+            </div>
+        `);
+    
+        // Add email checkboxes if we found valid emails
+        if (emailItems.length > 0) {
+            const emailList = actionsContainer.find('.bsk-gfblcv-email-list');
+            emailItems.forEach(function(email) {
+                emailList.append(`
+                    <li>
+                        <label>
+                            <input type="checkbox" value="${escapeHtml(email)}" class="bsk-gfblcv-form-entry-email">
+                            ${escapeHtml(email)}
+                        </label>
+                    </li>
+                `);
+            });
+        }
+
+        // Get entry ID from the clicked item
+        const entryId = clickedItem.data('entry-id');
+
+        // Add IP section if we have IP data for this entry
+        if (window.bsk_gfblcv_free_data?.fmnt_entry_ips?.[entryId]) {
+            const ipAddress = window.bsk_gfblcv_free_data.fmnt_entry_ips[entryId];
+            
+            // Generate IP lists options
+            let ipListOptions = '<option value="">Select a IP list...</option>';
+            if (window.bsk_gfblcv_free_data.ip_lists) {
+                window.bsk_gfblcv_free_data.ip_lists.forEach(list => {
+                    ipListOptions += `<option value="${list.id}">${escapeHtml(list.title)}</option>`;
+                });
+            }
+
+            let addToListSaveAnchor = `<a href="javascript:void(0);" 
+                                        class="button bsk-gfblcv-form-entry-add-ip-to-list-select-save" 
+                                        data-ip="${escapeHtml(ipAddress)}">Save</a>`;
+            if ( window.bsk_gfblcv_free_data.license_type == 'PERSONAL' || window.bsk_gfblcv_free_data.license_type == 'CREATOR') {
+                addToListSaveAnchor = '';
+            }
+
+            const ipSection = $(`
+                <div class="bsk-gfblcv-form-entry-action-section ip-action-section" style="margin-top: 40px;">
+                    <h4>Add IP to List</h4>
+                    <ul>
+                        <li>IP Address: <b>${escapeHtml(ipAddress)}</b></li>
+                    </ul>
+                    <div class="bsk-gfblcv-form-entry-list-container">
+                        <p>
+                            <select class="bsk-gfblcv-form-entry-add-to-list-select" style="width: 50%;">
+                                ${ipListOptions}
+                            </select>
+                        </p>
+                        <p>
+                            ${addToListSaveAnchor}
+                            <span class="bsk-gfbl-ajax-loader" style="display: none;">
+                                <img src="${window.bsk_gfblcv_free_data?.ajax_loader_url}">
+                            </span>
+                        </p>
+                        <p class="bsk-gfblcv-form-entry-add-to-list-error" style="color: #FF0000; display: none;"></p>
+                        <p class="bsk-gfblcv-form-entry-add-to-list-success" style="color: #008800; display: none;"></p>
+                    </div>
+                </div>
+            `);
+
+            actionsContainer.append(ipSection);
+
+
+            let updateLicenseTypeStr = `
+            <div class="bsk-gfblcv-tips-box" style="width: 50%;">
+                <p>This feature requires a <span style="font-weight: bold;">BUSINESS</span>( or above ) license for the Pro version. </p>
+                <p><a href="${window.bsk_gfblcv_free_data.settings_license_page_url}" target="_blank">Click here to buy a license</a></p>
+            </div>`;
+
+            actionsContainer.append(updateLicenseTypeStr);
+
+        }
+
+        // Insert before the footer
+        boxFooter.before(actionsContainer);
+    }
+    
+    // Email validation function
+    function isValidEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+    
+    // Helper function to escape HTML
+    function escapeHtml(unsafe) {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    }
 
 });

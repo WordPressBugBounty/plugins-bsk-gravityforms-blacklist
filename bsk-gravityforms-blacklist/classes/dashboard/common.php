@@ -31,6 +31,28 @@ class BSK_GFBLCV_Dashboard_Common {
 		
 		return $options_str;
 	}
+
+    public static function bsk_gfblcv_get_list_by_type_in_array( $list_type ){
+		global $wpdb;
+		
+		if( $list_type == "" ){
+			return '';
+		}
+		
+        $list_table = $wpdb->prefix.BSK_GFBLCV::$_bsk_gfblcv_list_tbl_name;
+		$return_array = array();
+		
+		$sql = 'SELECT * FROM `'.$list_table.'` WHERE `list_type` = %s ORDER BY `list_name` ASC';
+		$sql = $wpdb->prepare( $sql, $list_type );
+		$results = $wpdb->get_results( $sql );
+		if( $results && is_array($results) && count($results) > 0 ){
+			foreach( $results as $list_obj ){
+                $return_array[] = array('id' => $list_obj->id, 'title' => $list_obj->list_name);
+			}
+		}
+		
+		return $return_array;
+	}
     
     public static function bsk_gfblcv_get_list_comparison( $selected = '' ){
 		$options_str = '';
@@ -537,4 +559,22 @@ class BSK_GFBLCV_Dashboard_Common {
         return $form_fields_array;
     }
 
+    public static function bsk_gfblcv_get_fmnt_entry_ips_in_array(){
+		global $wpdb;
+		
+        $list_table = $wpdb->prefix.'frmt_form_entry_meta';
+		$return_array = array();
+		
+		$sql = 'SELECT `entry_id`, `meta_value` FROM `'.$list_table.'` WHERE `meta_key` = %s ORDER BY `entry_id` ASC';
+		$sql = $wpdb->prepare( $sql, '_forminator_user_ip' );
+		$results = $wpdb->get_results( $sql );
+		if( $results && is_array($results) && count($results) > 0 ){
+			foreach( $results as $list_obj ){
+                $return_array[intval($list_obj->entry_id)] = $list_obj->meta_value;
+			}
+		}
+		
+		return $return_array;
+	}
+    
 }

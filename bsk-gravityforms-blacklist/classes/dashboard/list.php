@@ -13,6 +13,11 @@ class BSK_GFBLCV_Dashboard_List {
 	}
 	
 	function bsk_gfblcv_list_edit( $list_id, $list_view, $current_view ){
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( '<p>You are now allowed to do this!</p>' );
+        }
+
 		global $wpdb;
 		
 		$list_type = 'BLACK_LIST';
@@ -473,6 +478,11 @@ class BSK_GFBLCV_Dashboard_List {
 	}
 	
 	function show_export_as_csv_form( $list_id ) {
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( '<p>You are now allowed to do this!</p>' );
+        }
+
 		if( $list_id < 1 ){
 			return;
 		}
@@ -501,6 +511,11 @@ class BSK_GFBLCV_Dashboard_List {
 	}
 	
 	function bsk_gfblcv_save_list_fun( $data ){
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( '<p>You are now allowed to do this!</p>' );
+        }
+
 		global $wpdb;
 
 		//check nonce field
@@ -578,6 +593,11 @@ class BSK_GFBLCV_Dashboard_List {
 	}
 	
 	function bsk_gfblcv_save_item_fun( $data ){
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( '<p>You are now allowed to do this!</p>' );
+        }
+
 		global $wpdb;
 
 		//check nonce field
@@ -590,12 +610,12 @@ class BSK_GFBLCV_Dashboard_List {
 			return;
 		}
 
-        if ( ! class_exists( 'BSKCommon' ) ) {
+        if ( ! class_exists( 'BSK_FormsBlacklist_Free_Common' ) ) {
             require_once( BSK_GFBLCV_FREE_DIR . 'classes/bskcommon/common.php' );
         }
 
         $list_id = intval( sanitize_text_field( $data['bsk_gfblcv_list_id'] ) );
-		$value = BSKCommon::sanitize_text_field( $data['bsk_gfblcv_add_item_by_input_name'], true );
+		$value = BSK_FormsBlacklist_Free_Common::sanitize_text_field( $data['bsk_gfblcv_add_item_by_input_name'], true );
 		$list_type = sanitize_text_field( $data['bsk_gfblcv_items_list_type'] );
 		
 		$value = wp_unslash($value);
@@ -640,6 +660,11 @@ class BSK_GFBLCV_Dashboard_List {
 	}
 	
 	function bsk_gfblcv_delete_item_fun( $data ){
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( '<p>You are now allowed to do this!</p>' );
+        }
+
 		global $wpdb;
 
 		//check nonce field
@@ -687,6 +712,11 @@ class BSK_GFBLCV_Dashboard_List {
 	}
 	
 	function bsk_gfblcv_delete_list_by_id_fun( $data ){
+
+        if ( ! current_user_can( 'manage_options' ) ) {
+            wp_die( '<p>You are now allowed to do this!</p>' );
+        }
+        
 		//check nonce field
 		if ( !wp_verify_nonce( $data['_wpnonce'], 'bsk_gfblcv_list_oper_nonce' ) ){
 			die( 'Security check!' );

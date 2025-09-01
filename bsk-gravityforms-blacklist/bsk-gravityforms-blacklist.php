@@ -4,7 +4,7 @@
 * Plugin Name: BSK Forms Blacklist
 * Plugin URI: https://www.bannersky.com/gravity-forms-blacklist-and-custom-validation/
 * Description: The plugin help you avoid spam submissions from GravityForms, Formidable Forms, WP Forms. You may set it to use blacklist, whitelist, ip address or email to validate visitor's input and only allow valid entry submitted. It support validate multiple fields.
-* Version: 4.1
+* Version: 4.2
 * Author: BannerSky.com
 * Author URI: http://www.bannersky.com/
 * License: GPLv2 or later
@@ -28,7 +28,7 @@ class BSK_GFBLCV {
 	
     private static $instance;
     
-	public static $_plugin_version = '4.1';
+	public static $_plugin_version = '4.2';
 	private static $_bsk_gfblcv_db_version = '3.2';
 	private static $_bsk_gfblcv_saved_db_version_option = '_bsk_gfbl_db_ver_';
     private static $_plugin_db_upgrading = '_bsk_gfbl_db_upgrading_';
@@ -192,6 +192,40 @@ class BSK_GFBLCV {
                                  array( 'jquery' ), 
                                  filemtime( BSK_GFBLCV_FREE_DIR.'js/bsk-gfblcv-admin.js' )
                              );
+
+
+            if ( ! class_exists( 'BSK_GFBLCV_Dashboard_Common' ) ) {
+                require_once( BSK_GFBLCV_FREE_DIR . 'classes/dashboard/common.php' );
+            }
+            if ( BSK_GFBLCV_Dashboard_Common::bsk_gfblcv_is_form_plugin_supported('FRMT') ) {
+                $license_type = 'PERSONAL';
+                $list_data = array(
+                    'Blacklist' => BSK_GFBLCV_Dashboard_Common::bsk_gfblcv_get_list_by_type_in_array( 'BLACK_LIST' ),
+                    'White List' => BSK_GFBLCV_Dashboard_Common::bsk_gfblcv_get_list_by_type_in_array( 'WHITE_LIST' ),
+                    'Email List' =>  BSK_GFBLCV_Dashboard_Common::bsk_gfblcv_get_list_by_type_in_array( 'EMAIL_LIST' ),
+                );
+                $ip_list_data = BSK_GFBLCV_Dashboard_Common::bsk_gfblcv_get_list_by_type_in_array( 'IP_LIST' );
+                $fmnt_entry_ips = BSK_GFBLCV_Dashboard_Common::bsk_gfblcv_get_fmnt_entry_ips_in_array();
+                /*  $fmnt_entry_ips = array(
+                    '49' => '::1',
+                    '48' => '192.168.1.1',
+                    '47' => '10.0.0.1'
+                ); */
+                wp_localize_script(
+                    'bsk-gfblcv-admin',
+                    'bsk_gfblcv_free_data',
+                    array(
+                        'fmnt_entry_ips' => $fmnt_entry_ips,
+                        'ip_lists' => $ip_list_data,
+                        'list_data' => $list_data,
+                        'license_type' => $license_type,
+                        'settings_license_page_url' => 'https://www.bannersky.com/gravity-forms-blacklist-and-custom-validation/',
+                        'ajax_loader_url' => plugins_url('images/ajax-loader.gif', __FILE__),
+                        'ajax_nonce' => wp_create_nonce('bsk_gfbl_ff_entry_save_item_to_list_ajax_oper_nonce')
+                    )
+                );
+            }
+
             if( BSK_GFBLCV_Dashboard_Common::bsk_gfblcv_is_form_plugin_supported('WPF') ) {
                 wp_enqueue_script( 
                                     'bsk-gfblcv-admin-wpf',

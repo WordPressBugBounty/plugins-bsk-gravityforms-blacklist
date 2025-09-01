@@ -8,7 +8,7 @@ if ( ! class_exists( 'BSK_GFBLCV' ) ) {
  *
  * Includes common methods for all BSK WordPress plugins.
  */
-class BSKCommon {
+class BSK_FormsBlacklist_Free_Common {
     
 	public static function sanitize_text_field( $str, $keep_whitespaces = true, $keep_newlines = false ){
         if ( is_object( $str ) || is_array( $str ) ) {
@@ -49,5 +49,21 @@ class BSKCommon {
         }
 
         return $filtered;
+    }
+
+    public static function bsk_gfblcv_extract_emails_from_string( $string ) {
+
+        if ( trim( $string ) == '' ) {
+            return false;
+        }
+
+        $pattern = '/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/';
+        
+        $matched_num = preg_match_all($pattern, $string, $matches);
+        if ( ! $matched_num ) {
+            return false;
+        }
+        
+        return $matches[0];
     }
 }
